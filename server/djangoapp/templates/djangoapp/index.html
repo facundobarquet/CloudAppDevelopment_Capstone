@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light col">
         <a class="navbar-brand col-2 col px-5 h-100" href="#">
             <i class="fa-solid fa-car-on fa-xl text-primary mx-2"></i>
-            <span class="font-weight-bolder text-primary"> USCars </span>
+            <span class="font-weight-bolder text-primary"> BESTCars </span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -31,10 +31,10 @@
               <a class="nav-link pt-3" href="#"><h6>Home</h6> <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item col-3 my-auto">
-              <a class="nav-link pt-3" href="#"><h6>About Us</h6></a>
+              <a class="nav-link pt-3" href="{% url 'djangoapp:about' %}"><h6>About Us</h6></a>
             </li>
             <li class="nav-item col-3 my-auto">
-              <a class="nav-link pt-3" href="#"><h6>Contact Us</h6></a>
+              <a class="nav-link pt-3" href="{% url 'djangoapp:contact' %}"><h6>Contact Us</h6></a>
             </li>
           </ul>
           <form class="form-inline my-2 my-lg-0">
