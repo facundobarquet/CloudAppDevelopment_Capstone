@@ -11,6 +11,16 @@
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
     <script src="https://kit.fontawesome.com/5bc56508dd.js" crossorigin="anonymous"></script>
+    <style>
+        .alert-fixed {
+            position:fixed; 
+            top: 13% ; 
+            left: 68% ; 
+            width: 29%;
+            z-index:9999; 
+            border-radius:0px
+        }
+    </style>
 
 </head>
 
@@ -48,13 +58,23 @@
             {% endif %}
             {% csrf_token %}
                 {% if error %}
-                <p class="text-danger">Error</p>
-                {% endif %}
+                <input class="form-control mr-sm-2 w-25 border-danger" type="text" placeholder="Username" name="username">
+                <input class="form-control mr-sm-2 w-25 border-danger" type="password" placeholder="Password" name="password">
+                <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>
+                <div class="alert alert-fixed alert-danger alert-dismissible fade show " role="alert">
+                    <strong>Something went wrong :( </strong>
+                    <hr>{{error}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                {% else %}
                 <input class="form-control mr-sm-2 w-25" type="text" placeholder="Username" name="username">
                 <input class="form-control mr-sm-2 w-25" type="password" placeholder="Password" name="password">
-                <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>
+                <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>                
+                {% endif %}
             </form>
-            <a class="form-control btn btn-outline-primary my-2 ml-2 my-sm-0 col-2" href="{% url 'djangoapp:signup'%}">Sign Up</a>
+            <a class="form-control btn btn-outline-primary my-2 ml-2 my-sm-0 col-2" href="{% url 'djangoapp:registration'%}">Sign Up</a>
         </div>
         {% else %}
         <div class="d-inline-flex my-2 my-lg-0 flex-row justify-content-end">
