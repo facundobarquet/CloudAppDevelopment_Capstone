@@ -54,12 +54,12 @@ def login_request(request, page):
                 url = 'djangoapp/'+page+'.html'
                 context ={
                 "error":"Wrong username or password"
-            }
-            return render(request, url, context)
+                }
+                return render(request, url, context)
         else:
             url = 'djangoapp/'+page+'.html'
             context ={
-                "error":"Missing username"
+                "error":"Couldn't authenticate user"
             }
             return render(request, url, context)
     else:
@@ -82,7 +82,7 @@ def logout_request(request, page):
 def registration_request(request):
     context = {}
     if request.method == 'GET':
-        return render(request, 'djangoapp/signup.html', context)
+        return render(request, 'djangoapp/registration.html', context)
     elif request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -100,7 +100,10 @@ def registration_request(request):
             login(request, user)
             return redirect("djangoapp:index")
         else:
-            return render(request, 'djangoapp/signup.html', context)
+            context = {
+                "error" : "User already exists"
+            }
+            return render(request, 'djangoapp/registration.html', context)
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
