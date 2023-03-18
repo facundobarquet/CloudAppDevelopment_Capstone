@@ -40,19 +40,24 @@
             {% endblock navlist %}
         </ul>
         {% if not user.is_authenticated %}
-        <div class="d-inline-flex flex-row justify-content-end alling-items-center">
-            <form class="form-inline my-2 my-lg-0" action="{% url 'djangoapp:login' page %}"  method="post">
+        <div class="d-inline-flex flex-row justify-content-end">
+            {% if page %}
+            <form class="form-inline my-2 my-lg-0 justify-content-end col" action="{% url 'djangoapp:login' page %}"  method="post">
+            {% else %}
+            <form class="form-inline my-2 my-lg-0 justify-content-end col" action="{% url 'djangoapp:login' page='index' %}"  method="post">
+            {% endif %}
             {% csrf_token %}
+                {% if error %}
+                <p class="text-danger">Error</p>
+                {% endif %}
                 <input class="form-control mr-sm-2 w-25" type="text" placeholder="Username" name="username">
                 <input class="form-control mr-sm-2 w-25" type="password" placeholder="Password" name="password">
                 <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>
             </form>
-            <div class="my-2 my-lg-0">
-                <a class="btn btn-outline-primary my-2 ml-1 my-sm-0" href="{% url 'djangoapp:signup'%}">Sign Up</a>
-            </div>
+            <a class="form-control btn btn-outline-primary my-2 ml-2 my-sm-0 col-2" href="{% url 'djangoapp:signup'%}">Sign Up</a>
         </div>
         {% else %}
-        <div class="my-2 my-lg-0 flex-row justify-content-end">
+        <div class="d-inline-flex my-2 my-lg-0 flex-row justify-content-end">
             <p class="text-primary my-auto mx-5">({{user.username}})</p>
             <a class="btn btn-outline-primary my-2 ml-1 my-sm-0" href="{% url 'djangoapp:logout' page %}">Log Out</a>
         </div>

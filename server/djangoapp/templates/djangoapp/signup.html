@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Dealership Review{% endblock title %}</title>
+    <title>{% block title %}Sing Up{% endblock title %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -15,22 +15,29 @@
 </head>
 
 <body class="text-center">
-    <form class="form-signin">
-  <img class="mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-  <label for="inputEmail" class="sr-only">Email address</label>
-  <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-  <label for="inputPassword" class="sr-only">Password</label>
-  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-  <div class="checkbox mb-3">
-    <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label>
-  </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-  <p class="mt-5 mb-3 text-muted">© 2017-2019</p>
-</form>
-
+    <div class="container mt-3 w-50 py-4 bg-light">
+        <form class="form-signin" action="{% url 'djangoapp:signup' %}"  method="post">
+            {% csrf_token %}
+            <h1><i class="fa-solid fa-car-on fa-2xl text-primary mx-2 mb-5"></i></h1>
+            <h1 class="h3 mb-3 font-weight-bolder">Sign Up</h1>
+            <hr>
+            <label for="username" class="font-weight-bolder mt-2">User Name:</label>
+            <input type="text" name="username" id="username" class="form-control w-75 mx-auto" placeholder="Enter User Name" required="" autofocus="">
+            <div class="row w-75 mx-auto my-2">
+                <div class="col-6 pl-0">
+                    <label for="firstname" class="font-weight-bolder mt-2">First Name:</label>
+                    <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Enter First Name" required="" autofocus="">
+                </div>
+                <div class="col-6 pr-0">
+                    <label for="lastname" class="font-weight-bolder mt-2">Last Name:</label>
+                    <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Enter Last Name" required="" autofocus="">
+                </div>
+            </div>
+            <label for="inputPassword" class="font-weight-bolder mt-2">Password:</label>
+            <input type="password" name="password" id="password" class="form-control w-75 mx-auto" placeholder="Password" required="">
+            <button class="btn btn-lg btn-primary btn-block mt-5" type="submit">Sign up</button>
+        </form>
+    </div>
 
 </body>
 </html>
