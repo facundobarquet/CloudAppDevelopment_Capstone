@@ -26,34 +26,39 @@
         </button>
       
         <div class="collapse navbar-collapse col" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto col-6 flex-row justify-content-start">
+        <ul class="navbar-nav mr-auto col-6 flex-row justify-content-start">
             {% block navlist %}
-            <li class="nav-item active my-auto">
-              <a class="nav-link pt-3 mr-5 " href="#"><h6>Home</h6> <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item my-auto">
-              <a class="nav-link pt-3 mr-5" href="{% url 'djangoapp:about' %}"><h6>About Us</h6></a>
-            </li>
-            <li class="nav-item my-auto">
-              <a class="nav-link pt-3 mr-5" href="{% url 'djangoapp:contact' %}"><h6>Contact Us</h6></a>
-            </li>
+                <li class="nav-item active my-auto">
+                    <a class="nav-link pt-3 mr-5 " href="#"><h6>Home</h6> <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item my-auto">
+                    <a class="nav-link pt-3 mr-5" href="{% url 'djangoapp:about' %}"><h6>About Us</h6></a>
+                </li>
+                <li class="nav-item my-auto">
+                    <a class="nav-link pt-3 mr-5" href="{% url 'djangoapp:contact' %}"><h6>Contact Us</h6></a>
+                </li>
             {% endblock navlist %}
-          </ul>
-          {% if user.authenticated %}
-          <form class="form-inline my-2 my-lg-0 flex-row justify-content-end">
-            <input class="form-control mr-sm-2 w-25" type="text" placeholder="Username" aria-label="Search">
-            <input class="form-control mr-sm-2 w-25" type="password" placeholder="Password" aria-label="Search">
-            <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>
-            <button class="btn btn-outline-primary my-2 ml-1 my-sm-0">Sign Up</button>
-          </form>
-          {% else %}
-          <div class="form-inline my-2 my-lg-0 flex-row justify-content-end">
-            <p class="text-primary my-auto mx-5">({{user.name}})</p>
-            <button class="btn btn-outline-primary my-2 ml-1 my-sm-0">Log Out</button>
-          </div>
-          {% endif %}
+        </ul>
+        {% if not user.is_authenticated %}
+        <div class="d-inline-flex flex-row justify-content-end alling-items-center">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'djangoapp:login' page %}"  method="post">
+            {% csrf_token %}
+                <input class="form-control mr-sm-2 w-25" type="text" placeholder="Username" name="username">
+                <input class="form-control mr-sm-2 w-25" type="password" placeholder="Password" name="password">
+                <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>
+            </form>
+            <div class="my-2 my-lg-0">
+                <a class="btn btn-outline-primary my-2 ml-1 my-sm-0" href="{% url 'djangoapp:signup'%}">Sign Up</a>
+            </div>
         </div>
-      </nav>
+        {% else %}
+        <div class="my-2 my-lg-0 flex-row justify-content-end">
+            <p class="text-primary my-auto mx-5">({{user.username}})</p>
+            <a class="btn btn-outline-primary my-2 ml-1 my-sm-0" href="{% url 'djangoapp:logout' page %}">Log Out</a>
+        </div>
+        {% endif %}
+        </div>
+    </nav>
       
     <!--Add a dealer table here -->
         <main class="container mt-5">
