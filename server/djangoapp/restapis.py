@@ -12,8 +12,12 @@ def get_request(url, **kwargs):
     print(kwargs)
     print("GET from {} ".format(url))
     try:
+        if api_key:
         # Call get method of requests library with URL and parameters
-        response = requests.get(url, headers={'Content-Type': 'application/json'},
+            response = requests.get(url, headers={'Content-Type': 'application/json'},
+                                    params=kwargs, auth=HTTPBasicAuth('apikey', api_key))
+        else:
+            response = requests.get(url, headers={'Content-Type': 'application/json'},
                                     params=kwargs)
     except:
         # If any error occurs
@@ -70,7 +74,7 @@ def get_dealer_reviews_from_cf(url, dealerId):
             review_obj = DealerReview(dealership=review["dealership"], name=review["name"], purchase=review["purchase"],
                                    review=review["review"], purchase_date=review["purchase_date"],
                                    car_make=review["car_make"], car_model=review["car_model"], 
-                                   car_year=review["car_year"], sentiment="Yet to know", id=review["id"])
+                                   car_year=review["car_year"], sentiment=analyze_review_sentiments(review["review"]), id=review["id"])
             results.append(review_obj)
 
     return results
@@ -79,6 +83,19 @@ def get_dealer_reviews_from_cf(url, dealerId):
 # def analyze_review_sentiments(text):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
+def analyze_review_sentiments(text, **kwargs):
+  params = dict()
+  params["text"] = kwargs["text"]
+  params["version"] = kwargs["version"]
+  params["features"] = kwargs["features"]
+  params["return_analyzed_text"] = kwargs["return_analyzed_text"]
+
+  url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/fb310784-a021-4a1d-90fc-24e3bb0ed300"
+  api_key = "F2JoML5i6pMcpZaqPbGsmOKW9r35-jFcHCyWJe9pi9jA"
+  response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
+                                    auth=HTTPBasicAuth('apikey', api_key))
+  score = response["entities"]
+  return score
 
 
 
