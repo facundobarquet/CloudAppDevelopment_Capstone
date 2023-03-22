@@ -123,10 +123,8 @@ def get_dealerships(request):
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/faa4e27a-4308-4e63-99f9-80ea8ab01d4f/dealership-package/get-dealership.json"
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
-        # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
-        return HttpResponse(dealer_names)
+        context["dealerships"] = dealerships
+        return render(request,'djangoapp/index.html', context)
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
@@ -154,7 +152,7 @@ def get_dealer_details(request, dealer_id):
 def add_review(request, dealer_id):
     user = request.user
     if user.is_authenticated():
-        review = {}
+        review = request.body
         json_payload = {}
         json_payload["review" : review]
         result = post_request(url, json_payload, dealerId=dealer_id)
