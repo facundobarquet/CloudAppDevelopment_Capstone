@@ -9,13 +9,21 @@ from django.contrib import messages
 from datetime import datetime
 import logging
 import json
-from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf
+from .restapis import *
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
 # Create your views here.
+#testing view
+def testNLU(request):
+     if request.user:
+        params = dict()
+        text = "This is a test text!"
+        result = analyze_review_sentiments(text) + "User" + str(request.user)
+        return HttpResponse(result)
+
 
 
 # Create an `about` view to render a static about page
@@ -137,8 +145,18 @@ def get_dealer_details(request, dealer_id):
         #review_dealership = ' '.join([review.dealership for review in reviews])
         # Return a list of dealer short name
         return HttpResponse(reviews)
+    elif request.method == "POST":
+        add_review(request, dealer_id)
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 # ...
-
+def add_review(request, dealer_id):
+    user = request.user
+    if user.is_authenticated():
+        review = {}
+        json_payload = {}
+        json_payload["review" : review]
+        result = post_request(url, json_payload, dealerId=dealer_id)
+        print(result)
+        return HttpResponse(result)
