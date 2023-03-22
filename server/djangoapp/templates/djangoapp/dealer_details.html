@@ -16,9 +16,27 @@
 
 {% block main %}
 <div class="container mt-5 py-5 px-5 bg-light">
-    <h1>Reviews for <span class="bolder">{{review}}</span></h1>
+    <h1>Reviews for <span class="bolder text-primary">{{dealership.full_name}}</span></h1>
     {% if not reviews %}
-    <h3>There are no reviews for this dealership yet. Log in and leave your review!</h3>
+        {% if not user.is_authenticated %}
+        <div class="mt-5 d-flex flex-column">
+            <div class="d-flex">
+            <h3>There are no reviews for this dealership yet. Login now and be the first to leave a review!</h3>
+            </div>
+            <div class="d-flex justify-content-end">
+            <a class="btn btn-primary w-25 mt-5  disabled" href="{% url 'djangoapp:index' %}">Add a Review</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="mt-5 d-flex flex-column">
+            <div class="d-flex">
+            <h3>There are no reviews for this dealership yet. Be the first to leave a review!</h3>
+            </div>
+            <div class="d-flex justify-content-end">
+            <a class="btn btn-primary w-25 mt-5" href="{% url 'djangoapp:index' %}">Add a Review</a>
+            </div>
+        </div>
+        {% endif %}
     {% else %}
     {% for review in reviews %}
     <li>{{review.review}}</li>

@@ -138,8 +138,14 @@ def get_dealer_details(request, dealer_id):
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/faa4e27a-4308-4e63-99f9-80ea8ab01d4f/dealership-package/get-review-by-dealership.json"
         # Get dealers from the URL
         reviews = get_dealer_reviews_from_cf(url, dealer_id)
-        print(reviews)
         context["reviews"] = reviews
+
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/faa4e27a-4308-4e63-99f9-80ea8ab01d4f/dealership-package/get-dealership.json"
+        dealerships = get_dealers_from_cf(url)
+        dealership = (element for element in dealerships if element.id == dealer_id)
+        context["dealership"] = next(dealership)
+        print('Type:', type(dealership), 'dealership', dealership)
+
         return render(request,'djangoapp/dealer_details.html', context)
     elif request.method == "POST":
         add_review(request, dealer_id)
