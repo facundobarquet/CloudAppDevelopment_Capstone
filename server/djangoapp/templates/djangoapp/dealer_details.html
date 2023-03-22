@@ -1,18 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
+{% extends 'djangoapp/index.html' %}
 
-    <body>
+{% block title %}Details{% endblock title %}
 
-    <!--Add a nav bar here -->
+{% block navlist %}
+<li class="nav-item my-auto">
+    <a class="nav-link pt-3 mr-5 " href="{% url 'djangoapp:index' %}"><h6>Home</h6></a>
+</li>
+<li class="nav-item my-auto">
+    <a class="nav-link pt-3 mr-5" href="{% url 'djangoapp:about' %}"><h6>About Us</h6></a>
+</li>
+<li class="nav-item my-auto">
+    <a class="nav-link pt-3 mr-5" href="{% url 'djangoapp:contact' %}"><h6>Contact Us</h6></a>
+</li>
+{% endblock navlist %}
 
-    <!-- Add reviews as cards -->
-
-    </body>
-
-</html>
+{% block main %}
+<div class="container mt-5 py-5 px-5 bg-light">
+    <h1>Reviews for <span class="bolder">{{review}}</span></h1>
+    {% if not reviews %}
+    <h3>There are no reviews for this dealership yet. Log in and leave your review!</h3>
+    {% else %}
+    {% for review in reviews %}
+    <li>{{review.review}}</li>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock main %}
