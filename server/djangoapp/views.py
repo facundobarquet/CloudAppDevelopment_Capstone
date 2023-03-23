@@ -10,6 +10,7 @@ from datetime import datetime
 import logging
 import json
 from .restapis import *
+from .models import CarModel
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -168,13 +169,22 @@ def add_review(request, dealer_id):
         dealerships = get_dealers_from_cf(url)
         dealership = (element for element in dealerships if element.id == dealer_id)
         context["dealership"] = next(dealership)
+
+        all_cars = CarModel.objects.all()
+        cars = []
+        for car in all_cars:
+            if car.dealer_id == dealer_id:
+                cars.append(car)
+        context["cars"] = (cars)
+
         return render(request, 'djangoapp/add_review.html', context)
 
     if request.method == "POST":
-        if user.is_authenticated():
-            review = request.body
-            json_payload = {}
-            json_payload["review" : review]
-            result = post_request(url, json_payload, dealerId=dealer_id)
-            print(result)
-        return HttpResponseRedirect('djangoapp:add_review')
+        review = request.body
+        json_payload = {}
+        url="https://us-south.functions.appdomain.cloud/api/v1/web/faa4e27a-4308-4e63-99f9-80ea8ab01d4f/dealership-package/post-review.json"
+        json_payload["review"] = review
+        print(json_payload)
+        result = post_request(url, json_payload)
+        print(result)
+        return HttpResponseRedirect('djangoapp:dealer_details', dealer_id)
