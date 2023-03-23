@@ -24,7 +24,7 @@
             <h3>There are no reviews for this dealership yet. Login now and be the first to leave a review!</h3>
             </div>
             <div class="d-flex justify-content-end">
-            <a class="btn btn-primary w-25 mt-5  disabled" href="{% url 'djangoapp:index' %}">Add a Review</a>
+            <a class="btn btn-primary w-25 mt-5  disabled" href="{% url 'djangoapp:add_review' dealer_id %}">Add a Review</a>
             </div>
         </div>
         {% else %}
@@ -33,14 +33,52 @@
             <h3>There are no reviews for this dealership yet. Be the first to leave a review!</h3>
             </div>
             <div class="d-flex justify-content-end">
-            <a class="btn btn-primary w-25 mt-5" href="{% url 'djangoapp:index' %}">Add a Review</a>
+            <a class="btn btn-primary w-25 mt-5" href="{% url 'djangoapp:add_review' dealer_id %}">Add a Review</a>
             </div>
         </div>
         {% endif %}
     {% else %}
+    <div class="mt-5 card-columns">
     {% for review in reviews %}
-    <li>{{review.review}}</li>
-    {% endfor %}
+        <div class="card " style="height:170px">
+            <div class="row no-gutters d-flex align-items-center h-100 border-primary border-left rounded-right">
+            {% if review.sentiment == "positive" %}
+                <div class="col-md-3 px-2">
+                  <img src="{{MEDIA_URL}}/emoji/positive.png" class="card-img" alt="sentiment">
+                </div>
+            {% elif review.sentiment == "negative" %}
+                <div class="col-md-3 px-2">
+                    <img src="{{MEDIA_URL}}/emoji/negative.png" class="card-img" alt="sentiment">
+                </div>
+            {% else %}
+                <div class="col-md-3 px-2">
+                    <img src="{{MEDIA_URL}}/emoji/neutral.png" class="card-img" alt="sentiment">
+                </div>
+            {% endif %}
+                <div class="col-md-9 h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">{{review.car_make}}, {{review.car_model}}</h5>
+                    <h6 class="card-title">{{review.car_year}}</h6>
+                    <p class="card-text">{{review.review}}</p>
+                  </div>
+                </div>
+              </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if not user.is_authenticated %}
+    <div class="mt-5 d-flex flex-column">
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-primary w-25 mt-5  disabled" href="{% url 'djangoapp:add_review' dealer_id %}">Add a Review</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="mt-5 d-flex flex-column">
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-primary w-25 mt-5" href="{% url 'djangoapp:add_review' dealer_id %}">Add a Review</a>
+        </div>
+    </div>
+    {% endif %}
     {% endif %}
 </div>
 {% endblock main %}

@@ -132,7 +132,8 @@ def get_dealerships(request):
 # ...
 def get_dealer_details(request, dealer_id):
     context = {
-        "page":"index"
+        "page":"dealer_details",
+        "dealer_id":dealer_id
     }
     if request.method == "GET":
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/faa4e27a-4308-4e63-99f9-80ea8ab01d4f/dealership-package/get-review-by-dealership.json"
@@ -144,7 +145,6 @@ def get_dealer_details(request, dealer_id):
         dealerships = get_dealers_from_cf(url)
         dealership = (element for element in dealerships if element.id == dealer_id)
         context["dealership"] = next(dealership)
-        print('Type:', type(dealership), 'dealership', dealership)
 
         return render(request,'djangoapp/dealer_details.html', context)
     elif request.method == "POST":
@@ -155,10 +155,26 @@ def get_dealer_details(request, dealer_id):
 # ...
 def add_review(request, dealer_id):
     user = request.user
-    if user.is_authenticated():
-        review = request.body
-        json_payload = {}
-        json_payload["review" : review]
-        result = post_request(url, json_payload, dealerId=dealer_id)
-        print(result)
-        return HttpResponse(result)
+    context = {
+        "page":"add_review",
+        "dealer_id":dealer_id
+    }
+    if request.method == "GET":
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/faa4e27a-4308-4e63-99f9-80ea8ab01d4f/dealership-package/get-review-by-dealership.json"
+        reviews = get_dealer_reviews_from_cf(url, dealer_id)
+        context["reviews"] = reviews
+
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/faa4e27a-4308-4e63-99f9-80ea8ab01d4f/dealership-package/get-dealership.json"
+        dealerships = get_dealers_from_cf(url)
+        dealership = (element for element in dealerships if element.id == dealer_id)
+        context["dealership"] = next(dealership)
+        return render(request, 'djangoapp/add_review.html', context)
+
+    if request.method == "POST":
+        if user.is_authenticated():
+            review = request.body
+            json_payload = {}
+            json_payload["review" : review]
+            result = post_request(url, json_payload, dealerId=dealer_id)
+            print(result)
+        return HttpResponseRedirect('djangoapp:add_review')
