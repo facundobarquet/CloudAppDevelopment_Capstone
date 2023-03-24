@@ -32,12 +32,13 @@ def post_request(url, json_payload, **kwargs):
     print(kwargs)
     print("POST to {} ".format(url))
     try:
-        response = requests.post(url, params=kwargs, json=json_payload)
+        response = requests.post(url, json=json_payload, params=kwargs)
     except:
         # If any error occurs
         print("Network exception occurred")
     status_code = response.status_code
     print("With status {} ".format(status_code))
+    print(response)
     json_data = json.loads(response.text)
     return json_data
 
@@ -92,16 +93,19 @@ def get_dealer_reviews_from_cf(url, dealerId):
 # def analyze_review_sentiments(text):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
-def analyze_review_sentiments(text): 
+def analyze_review_sentiments(text):
     url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/fb310784-a021-4a1d-90fc-24e3bb0ed300"
     api_key = "F2JoML5i6pMcpZaqPbGsmOKW9r35-jFcHCyWJe9pi9jA"
     authenticator = IAMAuthenticator(api_key) 
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2022-04-07',authenticator=authenticator) 
     natural_language_understanding.set_service_url(url)
     text = text*10
-    response = natural_language_understanding.analyze( text=text ,features=Features(sentiment=SentimentOptions(targets=[text]))).get_result() 
-    label=json.dumps(response, indent=2) 
-    label = response['sentiment']['document']['label'] 
+    try:
+        response = natural_language_understanding.analyze( text=text ,features=Features(sentiment=SentimentOptions(targets=[text]))).get_result() 
+        label=json.dumps(response, indent=2) 
+        label = response['sentiment']['document']['label']
+    except:
+        print("Something happened while trying to interpretate your text")
     return(label) 
 
 

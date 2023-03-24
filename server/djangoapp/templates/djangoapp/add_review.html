@@ -18,6 +18,7 @@
 <div class="container mt-5 py-5 px-5 bg-light">
     <h2>Add a review about <span class="text-primary">{{dealership.full_name}}</span></h2>
     <form action="{% url 'djangoapp:add_review' dealer_id%}" method="post" class="mt-5">
+    {% csrf_token %}
         <div class="form-group px-2 flex-column align-items-center">
             <label for="content" class="font-weight-bolder">Enter your review:</label>
             <textarea class="form-control mb-3" id="content" name="content" rows="2" required></textarea>
